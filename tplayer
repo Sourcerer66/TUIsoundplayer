@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+shopt -s dotglob
+
+BASE_URL=$1
+
+songs=($BASE_URL/*)
+
+make-url(){
+	name=$1
+	echo "$BASE_URL/$name.*"
+}
+
+for str in ${songs[@]}; do
+	echo $str
+done
