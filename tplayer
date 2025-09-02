@@ -1,11 +1,24 @@
 #!/usr/bin/env bash
 
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+
 shopt -s dotglob
 
 BASE_URL=$1
 
 songs=($BASE_URL/*)
+song_choice=$(($2 - 1))
 songs_names=("${songs[@]##*/}")
 size=${#songs[@]}
 
-ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$2]}"
+
+for ((i=0;i< $size; i++)) do
+	if [ $i -eq $song_choice ]; then
+		echo "$BOLD${songs_names[$i]}$NORMAL"
+	else
+		echo "${songs_names[$i]}"
+	fi
+done
+
+ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$song_choice]}"
