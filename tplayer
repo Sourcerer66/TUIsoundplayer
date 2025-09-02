@@ -5,12 +5,7 @@ shopt -s dotglob
 BASE_URL=$1
 
 songs=($BASE_URL/*)
+songs_names=("${songs[@]##*/}")
+size=${#songs[@]}
 
-make-url(){
-	name=$1
-	echo "$BASE_URL/$name.*"
-}
-
-for str in ${songs[@]}; do
-	echo $str
-done
+ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$2]}"
