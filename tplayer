@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
-
+#variaveis para guardar formatação de letras
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
+#crio um glob
 shopt -s dotglob
 
+#assinalo a url base pra o primeiro argumento, mas tenho que talvez inverter essa logica
 BASE_URL=$1
 
+#crio tanto um array para guardar os url completo das musicas tanto quanto o nome das musicas
 songs=($BASE_URL/*)
 song_choice=$(($2 - 1))
 songs_names=("${songs[@]##*/}")
 size=${#songs[@]}
 
-
+#echo todos as musicas presentes no diretorio e deixa de negrito a que esta tocando no momento
 for ((i=0;i< $size; i++)) do
 	if [ $i -eq $song_choice ]; then
 		echo "$BOLD${songs_names[$i]}$NORMAL"
@@ -20,5 +23,5 @@ for ((i=0;i< $size; i++)) do
 		echo "${songs_names[$i]}"
 	fi
 done
-
+#finalmente usa ffplay para tocar a musica
 ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$song_choice]}"
