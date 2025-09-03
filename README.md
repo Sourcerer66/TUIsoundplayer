@@ -1,3 +1,3 @@
 # TUIsoundplayer
 ### Objetivos
-Aplicativo para tocar suas musicas no termina😀
+Aplicativo para tocar suas musicas no terminal😀
