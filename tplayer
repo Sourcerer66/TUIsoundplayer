@@ -1,24 +1,35 @@
 #!/usr/bin/env bash
+#Depois colocar que é obrigatoria ter as bibliotecas dialog e ffmpeg instalados...
 
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
+COLS=$(tput cols)
+LINS=$(tput lines)
+
 
 shopt -s dotglob
 
 BASE_URL=$1
 
 songs=($BASE_URL/*)
-song_choice=$(($2 - 1))
 songs_names=("${songs[@]##*/}")
 size=${#songs[@]}
 
+dialog_options=()
+for ((i=0; i < size; i++)) do
+	dialog_options+=("$(($i+1))" "${songs_names[$i]}")
+done
+
+song_choice=$(dialog --clear --title "seletor de musica" --menu "escolha a musica" 0 0 0 "${dialog_options[@]}" 2>&1 >/dev/tty)
+
+clear
 
 for ((i=0;i< $size; i++)) do
-	if [ $i -eq $song_choice ]; then
+	if [ $((i + 1)) -eq $song_choice ]; then
 		echo "$BOLD${songs_names[$i]}$NORMAL"
 	else
 		echo "${songs_names[$i]}"
 	fi
 done
 
-ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$song_choice]}"
+ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$((song_choice - 1))]}"
