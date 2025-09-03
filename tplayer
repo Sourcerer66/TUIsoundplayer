@@ -1,27 +1,36 @@
 #!/usr/bin/env bash
-#variaveis para guardar formatação de letras
+#Depois colocar que é obrigatoria ter as bibliotecas dialog e ffmpeg instalados...
+
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
+COLS=$(tput cols)
+LINS=$(tput lines)
 
-#crio um glob
+
 shopt -s dotglob
 
-#assinalo a url base pra o primeiro argumento, mas tenho que talvez inverter essa logica
 BASE_URL=$1
 
-#crio tanto um array para guardar os url completo das musicas tanto quanto o nome das musicas
 songs=($BASE_URL/*)
-song_choice=$(($2 - 1))
 songs_names=("${songs[@]##*/}")
 size=${#songs[@]}
 
-#echo todos as musicas presentes no diretorio e deixa de negrito a que esta tocando no momento
-for ((i=0;i< $size; i++)) do
-	if [ $i -eq $song_choice ]; then
-		echo "$BOLD${songs_names[$i]}$NORMAL"
-	else
-		echo "${songs_names[$i]}"
-	fi
+dialog_options=()
+for ((i=0; i < size; i++)) do
+        dialog_options+=("$(($i+1))" "${songs_names[$i]}")
 done
-#finalmente usa ffplay para tocar a musica
-ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$song_choice]}"
+
+song_choice=$(dialog --clear --title "seletor de musica" --menu "escolha a musica" 0 0 0 "${dialog_options[@]}" 2>&1 >/dev/tty)
+
+clear
+
+for ((i=0;i< $size; i++)) do
+        if [ $((i + 1)) -eq $song_choice ]; then
+                echo "$BOLD${songs_names[$i]}$NORMAL"
+        else
+                echo "${songs_names[$i]}"
+        fi
+done
+
+ffplay -hide_banner -loglevel panic -autoexit -nodisp "${songs[$((song_choice - 1))]}"
+
