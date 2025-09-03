@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 #Depois colocar que é obrigatoria ter as bibliotecas dialog e ffmpeg instalados...
 
+
 #variaveis padrão
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 COLS=$(tput cols)
 LINS=$(tput lines)
 
+if ! command -v ffmpeg >/dev/null 2>&1
+then
+    echo "ffmpeg could not be found"
+    exit 1
+fi
 
+if ! command -v dialog >/dev/null 2>&1
+then
+    echo "dialog could not be found"
+    exit 1
+fi
 shopt -s dotglob
 
 BASE_URL=$1
@@ -27,7 +38,7 @@ clear
 
 for ((i=0;i< $size; i++)) do
         if [ $((i + 1)) -eq $song_choice ]; then
-                echo "$BOLD${songs_names[$i]}$NORMAL"
+                echo "$BOLD${songs_names[$i]}$NORMALi"
         else
                 echo "${songs_names[$i]}"
         fi
