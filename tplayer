@@ -38,7 +38,7 @@ clear
 
 for ((i=0;i< $size; i++)) do
         if [ $((i + 1)) -eq $song_choice ]; then
-                echo "$BOLD${songs_names[$i]}$NORMALi"
+                echo "$BOLD${songs_names[$i]}$NORMAL"
         else
                 echo "${songs_names[$i]}"
         fi
